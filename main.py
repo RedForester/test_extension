@@ -1,11 +1,14 @@
-from time import time
 from typing import Optional, Awaitable, Any
 
 import logging
 import traceback
-from config import EXT_ADDRESS, EXT_PORT
+import ujson
+
+from aiohttp import ClientSession, BasicAuth
 from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler, Application
+
+from config import EXT_ADDRESS, EXT_PORT, RF_BACKEND_BASE_URL
 
 
 class BaseHandler(RequestHandler):
@@ -98,6 +101,43 @@ class NotifyCommandHandler(BaseHandler):
         })
 
 
+class NotifyFromKvCommandHandler(BaseHandler):
+    async def post(self):
+        """
+        Open dialog using KV
+        """
+        session = self.request.headers.get('Session-Id')
+        map_id = self.get_query_argument('mapId')
+        user_id = self.get_query_argument('userId')
+        user_token = self.request.headers['Rf-Extension-Token']
+
+        # creating a new aiohttp session with Basic Auth using user extension and user token as password
+        _session: ClientSession = ClientSession(
+            # Temporary user token, that allows the extension to access the RedForester API.
+            auth=BasicAuth(login='extension', password=user_token),
+            json_serialize=ujson.dumps,
+        )
+
+        async with _session.post(
+            RF_BACKEND_BASE_URL + '/notify/dialog/map/' + map_id,
+            json={
+                'user_id': user_id,
+                'dialog_src': f'http://{EXT_ADDRESS}:{EXT_PORT}/',
+                'dialog_size': {
+                    'width': '300',
+                    'height': '400'
+                }
+            }
+        ) as response:
+            resp = await response.read()
+            if response.status == 200:
+                logging.info('Dialog has been created')
+            else:
+                logging.error(f'Dialog has NOT been created: {resp}')
+
+            await _session.close()
+
+
 class IframeCommandHandler(BaseHandler):
     async def post(self):
         """
@@ -148,10 +188,12 @@ if __name__ == '__main__':
         (r'/api/maps/(.+)', MapsHandler),
         # CMDs
         (r'/api/commands/notify', NotifyCommandHandler),
+        (r'/api/commands/notify_from_kv', NotifyFromKvCommandHandler),
         (r'/api/commands/iframe', IframeCommandHandler),
         (r'/api/commands/with_error', WithErrorCommandHandler),
         (r'/api/commands/url', OpenUrlCommandHandler)
     ])
+
     app.listen(EXT_PORT, EXT_ADDRESS)
     logging.info(f'Run on {EXT_ADDRESS}:{EXT_PORT}')
 
