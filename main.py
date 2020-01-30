@@ -13,9 +13,9 @@ from config import EXT_ADDRESS, EXT_PORT, RF_BACKEND_BASE_URL
 
 class BaseHandler(RequestHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
-        '''
+        """
         Implement this method to handle streamed request data.
-        '''
+        """
         pass
 
     def write_error(self, status_code: int, **kwargs: Any) -> None:
@@ -31,13 +31,18 @@ class BaseHandler(RequestHandler):
             }
         })
 
-    def get(self):
+    def get(self, *args, **kwargs):
         self.finish('I\'m alive!')
+
+    def post(self, *args, **kwargs):
+        self.finish({
+            'message': 'I\'m alive!',
+        })
 
 
 class MapsHandler(BaseHandler):
     def post(self, map_id):
-        '''
+        """
         This method handles assigning the extension to the map.
         Here, the extension can verify, that the map is satisfying some preconditions.
         It can be required types, nodes, etc.
@@ -46,7 +51,7 @@ class MapsHandler(BaseHandler):
         This handler will be called at the extension registration to verify,
         that the extension is up and works.
         :param map_id: id of the map
-        '''
+        """
 
         # This is persistence extension user token. It allow to use RF API from special user (with limitations),
         #  listen event queue.
@@ -58,14 +63,14 @@ class MapsHandler(BaseHandler):
         self.finish()
 
     def delete(self, map_id):
-        '''
+        """
         This method handles removing the extension from the map.
         If the extension have some data associated to the map, it must be deleted here.
         All subsequent requests to the map will be rejected with 403 status.
         This handler will be called at the extension registration to verify,
         that the extension is up and works.
         :param map_id: id of the map
-        '''
+        """
         logging.info(f'Extension deleted from map with id {map_id}')
 
         self.finish()
@@ -73,10 +78,10 @@ class MapsHandler(BaseHandler):
 
 class NotifyCommandHandler(BaseHandler):
     async def post(self):
-        '''
+        """
         This is an example command handler, that returns request arguments and the title of the node,
         at which it was called.
-        '''
+        """
         session = self.request.headers.get('Session-Id')
         user_id = self.get_query_argument('userId')
 
@@ -103,9 +108,9 @@ class NotifyCommandHandler(BaseHandler):
 
 class NotifyFromKvCommandHandler(BaseHandler):
     async def post(self):
-        '''
+        """
         Open dialog using KV
-        '''
+        """
         session = self.request.headers.get('Session-Id')
         map_id = self.get_query_argument('mapId')
         user_id = self.get_query_argument('userId')
@@ -140,9 +145,9 @@ class NotifyFromKvCommandHandler(BaseHandler):
 
 class IframeCommandHandler(BaseHandler):
     async def post(self):
-        '''
+        """
         Command handler that open iframe
-        '''
+        """
 
         await self.finish({
             'iframe': {
@@ -157,18 +162,18 @@ class IframeCommandHandler(BaseHandler):
 
 class WithErrorCommandHandler(BaseHandler):
     async def get(self):
-        '''
+        """
         This is an example command handler, that open iframe
-        '''
+        """
 
         raise ValueError('The value of this command is incorrect')
 
 
 class OpenUrlCommandHandler(BaseHandler):
     async def post(self):
-        '''
+        """
         This is an example command handler, that open iframe
-        '''
+        """
 
         await self.finish({
             'url': {
@@ -185,6 +190,7 @@ if __name__ == '__main__':
     # init tornado handlers
     app = Application([
         (r'/', BaseHandler),
+        (r'/api/is-alive', BaseHandler),
         (r'/api/maps/(.+)', MapsHandler),
         # CMDs
         (r'/api/commands/notify', NotifyCommandHandler),

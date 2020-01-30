@@ -1,11 +1,12 @@
+import json
+
 import requests
 
 from config import *
 
 
 def register_extension():
-    # make a call to the RedForester to register this extension
-    resp = requests.post(f'{RF_BACKEND_BASE_URL}/extensions', json={
+    data = {
         'name': EXT_NAME,
         'description': EXT_DESCRIPTION,
         # The address where the methodology is launched in the format of protocol: // host: port / url.
@@ -49,7 +50,7 @@ def register_extension():
             {
                 'name': 'Command-url',
                 'type': {
-                    'url': f'${EXT_BASE_URL}/',
+                    'url': f'{EXT_BASE_URL}/',
                 },
                 'description': 'open url in new tab',
                 'showRules': [
@@ -99,7 +100,10 @@ def register_extension():
                 ],
             },
         ],
-    }, headers={
+    }
+
+    # make a call to the RedForester to register this extension
+    resp = requests.post(f'{RF_BACKEND_BASE_URL}/extensions', json=data, headers={
         'Cookie': USER_COOKIE
     })
     if resp.ok:
