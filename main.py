@@ -161,12 +161,12 @@ class IframeCommandHandler(BaseHandler):
 
 
 class WithErrorCommandHandler(BaseHandler):
-    async def get(self):
+    async def post(self):
         """
         This is an example command handler, that open iframe
         """
 
-        raise ValueError('The value of this command is incorrect')
+        raise Exception('The value of this command is incorrect')
 
 
 class OpenUrlCommandHandler(BaseHandler):
