@@ -1,11 +1,13 @@
 {
   "name": "dev-extension",
   "description": "Example plugin for testing sending notifications, opening links and iframes",
+  "logo": "https://app.redforester.com/favicon",
   "repository": "https://github.com/RedForester/test-extension",
   "keywords": ["python", "tornado"],
   "success_url": "/",
   "env": {
       "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-python",
-      "RF_BACKEND_BASE_URL": "http://app.redforester.com/api"
+      "RF_BACKEND_BASE_URL": "http://app.redforester.com/api",
+      "HEROKU_APP_NAME": "test-extention"
   }
 }
