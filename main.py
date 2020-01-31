@@ -8,7 +8,7 @@ from aiohttp import ClientSession, BasicAuth
 from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler, Application
 
-from config import EXT_ADDRESS, EXT_PORT, RF_BACKEND_BASE_URL
+from config import EXT_ADDRESS, EXT_PORT, RF_BACKEND_BASE_URL, EXT_BASE_URL
 
 
 class BaseHandler(RequestHandler):
@@ -127,7 +127,7 @@ class NotifyFromKvCommandHandler(BaseHandler):
             RF_BACKEND_BASE_URL + '/notify/dialog/map/' + map_id,
             json={
                 'user_id': user_id,
-                'dialog_src': f'http://{EXT_ADDRESS}:{EXT_PORT}/',
+                'dialog_src': EXT_BASE_URL,
                 'dialog_size': {
                     'width': '300',
                     'height': '400'
@@ -151,7 +151,7 @@ class IframeCommandHandler(BaseHandler):
 
         await self.finish({
             'iframe': {
-                'url': f'http://{EXT_ADDRESS}:{EXT_PORT}/',  # url that will be open by RF client
+                'url': EXT_BASE_URL,  # url that will be open by RF client
                 # optional fields
                 # used to indicate iframe width and height in pixels
                 'width': 300,
@@ -177,7 +177,7 @@ class OpenUrlCommandHandler(BaseHandler):
 
         await self.finish({
             'url': {
-                'url': f'http://{EXT_ADDRESS}:{EXT_PORT}/'
+                'url': EXT_BASE_URL
             }
         })
 
