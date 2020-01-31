@@ -154,6 +154,8 @@ class NotifyFromKvCommandHandler(BaseHandler):
 
             await _session.close()
 
+        await self.finish()
+
 
 class DialogFromKvCommandHandler(BaseHandler):
     async def post(self):
@@ -185,6 +187,8 @@ class DialogFromKvCommandHandler(BaseHandler):
                 logging.error(f'Dialog has NOT been created: {data}')
 
             await _session.close()
+
+        await self.finish()
 
 
 class IframeCommandHandler(BaseHandler):
