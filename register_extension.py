@@ -35,6 +35,19 @@ def register_extension():
                 ],
             },
             {
+                'name': 'Show dialog using KV',
+                'type': {
+                    'action': 'dialog_from_kv',
+                },
+                'description': 'just open dialog but with KV',
+                'showRules': [
+                    {
+                        # Show on root node
+                        'root': True,
+                    },
+                ],
+            },
+            {
                 'name': 'Open url',
                 'type': {
                     'action': 'url',
