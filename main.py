@@ -101,8 +101,7 @@ class MapsHandler(BaseHandler):
 class NotifyCommandHandler(BaseHandler):
     async def post(self):
         """
-        This is an example command handler, that returns request arguments and the title of the node,
-        at which it was called.
+        This is an example command handler, that show successful notification with 'Hello, RedForester!'.
         """
 
         # Build response
@@ -113,7 +112,7 @@ class NotifyCommandHandler(BaseHandler):
                 # User session, that allows to send notifications back to the user interface in the browser
                 'session': self.session_id,
                 # Notification Text
-                'content': f'Hello, RedForester!',
+                'content': 'Hello, RedForester!',
                 # notification display style one of DEFAULT, PRIMARY, SUCCESS, DANGER, WARNING, INFO
                 'style': 'SUCCESS',
                 # notification display time in milliseconds
@@ -129,7 +128,7 @@ class NotifyCommandHandler(BaseHandler):
 class NotifyFromKvCommandHandler(BaseHandler):
     async def post(self):
         """
-        Open dialog using KV
+        This is an example of a command handler that creates a simple notification but using the API.
         """
         # creating a new aiohttp session with Basic Auth using user extension and user token as password
         _session: ClientSession = ClientSession(
@@ -160,7 +159,7 @@ class NotifyFromKvCommandHandler(BaseHandler):
 class DialogFromKvCommandHandler(BaseHandler):
     async def post(self):
         """
-        Open dialog using KV
+        This is an example of a command handler that creates a dialog that will be shown to the user.
         """
         # creating a new aiohttp session with Basic Auth using user extension and user token as password
         _session: ClientSession = ClientSession(
@@ -168,7 +167,8 @@ class DialogFromKvCommandHandler(BaseHandler):
             auth=BasicAuth(login='extension', password=self.user_token),
             json_serialize=ujson.dumps,
         )
-
+        
+        # perform request
         async with _session.post(
             RF_BACKEND_BASE_URL + '/notify/dialog/map/' + self.map_id,
             json={
@@ -194,7 +194,7 @@ class DialogFromKvCommandHandler(BaseHandler):
 class IframeCommandHandler(BaseHandler):
     async def post(self):
         """
-        Command handler that open iframe
+        This is an example of a command handler that opens the specified link in the IFrame user client
         """
 
         await self.finish({
@@ -211,7 +211,7 @@ class IframeCommandHandler(BaseHandler):
 class WithErrorCommandHandler(BaseHandler):
     async def post(self):
         """
-        This is an example command handler, that open iframe
+        Just throw an error that tornado should handle and return an answer that an internal error has occurred. 
         """
 
         raise Exception('The value of this command is incorrect')
@@ -220,7 +220,7 @@ class WithErrorCommandHandler(BaseHandler):
 class OpenUrlCommandHandler(BaseHandler):
     async def post(self):
         """
-        This is an example command handler, that open iframe
+        This is an example command handler, that open url in new tab
         """
 
         await self.finish({
