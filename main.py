@@ -146,10 +146,11 @@ class NotifyFromKvCommandHandler(BaseHandler):
                 'notification_text': 'Hello again RedForester'
             }
         ) as response:
+            data = await response.text("utf-8")
             if response.status == 200:
                 logging.info('Dialog has been created')
             else:
-                logging.error(f'Dialog has NOT been created: {await response.text("utf-8")}')
+                logging.error(f'Dialog has NOT been created: {data}')
 
             await _session.close()
 
@@ -177,10 +178,11 @@ class DialogFromKvCommandHandler(BaseHandler):
                 }
             }
         ) as response:
+            data = await response.text("utf-8")
             if response.status == 200:
                 logging.info('Dialog has been created')
             else:
-                logging.error(f'Dialog has NOT been created: {await response.text("utf-8")}')
+                logging.error(f'Dialog has NOT been created: {data}')
 
             await _session.close()
 
