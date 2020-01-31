@@ -1,11 +1,13 @@
+import os
+
 # base url of the RedForester API
-RF_BACKEND_BASE_URL = 'http://app.redforester.com/api'
+RF_BACKEND_BASE_URL = os.getenv('RF_BACKEND_BASE_URL', 'http://app.redforester.com/api')
 
 
 ########################################################
-# address and port, at which this extension is listening
-EXT_ADDRESS = '0.0.0.0'
-EXT_PORT = 8080
+# address and port where you can send a request for extension
+EXT_ADDRESS = os.getenv('HOST', '0.0.0.0')
+EXT_PORT = os.getenv('PORT', 8080)
 
 
 ########################################################
@@ -17,7 +19,7 @@ EXT_DESCRIPTION = 'test extension description'
 EXT_EMAIL = 'you.public.email@domain'
 
 # address, at which this extension is listening
-EXT_BASE_URL = f'http://{EXT_ADDRESS}:{EXT_PORT}'
+EXT_BASE_URL = os.getenv('EXT_BASE_URL', f'http://{EXT_ADDRESS}:{EXT_PORT}')
 
 # Cookie of the owner of this extension. Required only for register_extension.py script.
 USER_COOKIE = ''
