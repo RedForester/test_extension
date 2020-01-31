@@ -118,7 +118,7 @@ class NotifyCommandHandler(BaseHandler):
                 'content': 'Hello, RedForester!',
                 # notification display style one of DEFAULT, PRIMARY, SUCCESS, DANGER, WARNING, INFO
                 # for example using itterator with all styles
-                'style': notif_style_itter.next(),
+                'style': next(notif_style_itter),
                 # notification display time in milliseconds
                 'durationMs': 4 * 1000,
                 # cancel URL may not be set
