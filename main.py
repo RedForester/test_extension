@@ -1,5 +1,6 @@
 from typing import Optional, Awaitable, Any
 
+import itertools
 import logging
 import traceback
 import ujson
@@ -9,6 +10,8 @@ from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler, Application
 
 from config import EXT_ADDRESS, EXT_PORT, RF_BACKEND_BASE_URL, EXT_BASE_URL
+
+notif_style_itter = itertools.cycle(['DEFAULT', 'PRIMARY', 'SUCCESS', 'DANGER', 'WARNING', 'INFO'])
 
 
 class BaseHandler(RequestHandler):
@@ -114,7 +117,8 @@ class NotifyCommandHandler(BaseHandler):
                 # Notification Text
                 'content': 'Hello, RedForester!',
                 # notification display style one of DEFAULT, PRIMARY, SUCCESS, DANGER, WARNING, INFO
-                'style': 'SUCCESS',
+                # for example using itterator with all styles
+                'style': notif_style_itter.next(),
                 # notification display time in milliseconds
                 'durationMs': 4 * 1000,
                 # cancel URL may not be set
