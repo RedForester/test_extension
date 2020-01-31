@@ -149,7 +149,7 @@ class NotifyFromKvCommandHandler(BaseHandler):
             if response.status == 200:
                 logging.info('Dialog has been created')
             else:
-                logging.error(f'Dialog has NOT been created: {response.text("utf-8")}')
+                logging.error(f'Dialog has NOT been created: {await response.text("utf-8")}')
 
             await _session.close()
 
@@ -180,7 +180,7 @@ class DialogFromKvCommandHandler(BaseHandler):
             if response.status == 200:
                 logging.info('Dialog has been created')
             else:
-                logging.error(f'Dialog has NOT been created: {response.text("utf-8")}')
+                logging.error(f'Dialog has NOT been created: {await response.text("utf-8")}')
 
             await _session.close()
 
