@@ -142,16 +142,14 @@ class NotifyFromKvCommandHandler(BaseHandler):
             RF_BACKEND_BASE_URL + '/notify/notification/map/' + self.map_id,
             json={
                 'user_id': self.user_id,
-                'session_id': self.session_id,
                 'notification_type': 'info',
                 'notification_text': 'Hello again RedForester'
             }
         ) as response:
-            resp = await response.read()
             if response.status == 200:
                 logging.info('Dialog has been created')
             else:
-                logging.error(f'Dialog has NOT been created: {resp}')
+                logging.error(f'Dialog has NOT been created: {response.text("utf-8")}')
 
             await _session.close()
 
@@ -172,7 +170,6 @@ class DialogFromKvCommandHandler(BaseHandler):
             RF_BACKEND_BASE_URL + '/notify/dialog/map/' + self.map_id,
             json={
                 'user_id': self.user_id,
-                'session_id': self.session_id,
                 'dialog_src': EXT_BASE_URL,
                 'dialog_size': {
                     'width': '300',
@@ -180,11 +177,10 @@ class DialogFromKvCommandHandler(BaseHandler):
                 }
             }
         ) as response:
-            resp = await response.read()
             if response.status == 200:
                 logging.info('Dialog has been created')
             else:
-                logging.error(f'Dialog has NOT been created: {resp}')
+                logging.error(f'Dialog has NOT been created: {response.text("utf-8")}')
 
             await _session.close()
 
