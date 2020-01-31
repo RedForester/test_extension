@@ -12,6 +12,28 @@ from config import EXT_ADDRESS, EXT_PORT, RF_BACKEND_BASE_URL, EXT_BASE_URL
 
 
 class BaseHandler(RequestHandler):
+    @property
+    def session_id(self):
+        return self.request.headers.get('Session-Id')
+
+    @property
+    def map_id(self):
+        return self.get_query_argument('mapId')
+
+    @property
+    def node_id(self):
+        return self.get_query_argument('nodeId')
+
+    @property
+    def user_id(self):
+        return self.get_query_argument('userId')
+
+    @property
+    def user_token(self):
+        return self.request.headers['Rf-Extension-Token']
+
+    # === Methods ===
+
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         """
         Implement this method to handle streamed request data.
@@ -82,16 +104,14 @@ class NotifyCommandHandler(BaseHandler):
         This is an example command handler, that returns request arguments and the title of the node,
         at which it was called.
         """
-        session = self.request.headers.get('Session-Id')
-        user_id = self.get_query_argument('userId')
 
         # Build response
         await self.finish({
             'notify': {
                 # Id of the user, that started this command.
-                'userId': user_id,
+                'userId': self.user_id,
                 # User session, that allows to send notifications back to the user interface in the browser
-                'session': session,
+                'session': self.session_id,
                 # Notification Text
                 'content': f'Hello, RedForester!',
                 # notification display style one of DEFAULT, PRIMARY, SUCCESS, DANGER, WARNING, INFO
@@ -111,27 +131,20 @@ class NotifyFromKvCommandHandler(BaseHandler):
         """
         Open dialog using KV
         """
-        session = self.request.headers.get('Session-Id')
-        map_id = self.get_query_argument('mapId')
-        user_id = self.get_query_argument('userId')
-        user_token = self.request.headers['Rf-Extension-Token']
-
         # creating a new aiohttp session with Basic Auth using user extension and user token as password
         _session: ClientSession = ClientSession(
             # Temporary user token, that allows the extension to access the RedForester API.
-            auth=BasicAuth(login='extension', password=user_token),
+            auth=BasicAuth(login='extension', password=self.user_token),
             json_serialize=ujson.dumps,
         )
 
         async with _session.post(
-            RF_BACKEND_BASE_URL + '/notify/dialog/map/' + map_id,
+            RF_BACKEND_BASE_URL + '/notify/notification/map/' + self.map_id,
             json={
-                'user_id': user_id,
-                'dialog_src': EXT_BASE_URL,
-                'dialog_size': {
-                    'width': '300',
-                    'height': '400'
-                }
+                'user_id': self.user_id,
+                'session_id': self.session_id,
+                'notification_type': 'info',
+                'notification_text': 'Hello again RedForester'
             }
         ) as response:
             resp = await response.read()
