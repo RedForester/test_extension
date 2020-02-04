@@ -85,7 +85,7 @@ class MapsHandler(BaseHandler):
 
         logging.info(f'Extension assigned to map with id {map_id}, service token: {service_token}')
 
-        self.finish()
+        self.finish({})
 
     def delete(self, map_id):
         """
@@ -98,7 +98,7 @@ class MapsHandler(BaseHandler):
         """
         logging.info(f'Extension deleted from map with id {map_id}')
 
-        self.finish()
+        self.finish({})
 
 
 class NotifyCommandHandler(BaseHandler):
@@ -157,7 +157,7 @@ class NotifyFromKvCommandHandler(BaseHandler):
 
             await _session.close()
 
-        await self.finish()
+        await self.finish({})
 
 
 class DialogFromKvCommandHandler(BaseHandler):
@@ -192,7 +192,7 @@ class DialogFromKvCommandHandler(BaseHandler):
 
             await _session.close()
 
-        await self.finish()
+        await self.finish({})
 
 
 class IframeCommandHandler(BaseHandler):
