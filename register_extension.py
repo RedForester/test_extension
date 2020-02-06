@@ -9,8 +9,8 @@ def register_extension():
     data = {
         'name': EXT_NAME,
         'description': EXT_DESCRIPTION,
-        # The address where the methodology is launched in the format of protocol: // host: port / url.
-        # Only necessary if the methodology has action type commands
+        # The address where the extension is launched in the format of protocol: // host: port / url.
+        # Only necessary if the extension has action type commands
         'baseUrl': EXT_BASE_URL,
         'email': EXT_EMAIL,
         'commands': [
@@ -100,7 +100,7 @@ def register_extension():
                 ],
             },
         ],
-        # Types of nodes, necessary methodologies for work
+        # Types of nodes that are necessary for the extension to work
         'requiredTypes': [
             {
                 'name': 'CustomType1',

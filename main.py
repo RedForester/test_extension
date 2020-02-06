@@ -71,10 +71,8 @@ class MapsHandler(BaseHandler):
         This method handles assigning the extension to the map.
         Here, the extension can verify, that the map is satisfying some preconditions.
         It can be required types, nodes, etc.
-        If everything is OK, the handler must response with the status 200.
+        If everything is OK, the handler must respond with the status 200.
         Otherwise, the handler can response with the status 400 and the body, which will describe the problem.
-        This handler will be called at the extension registration to verify,
-        that the extension is up and works.
         :param map_id: id of the map
         """
 
@@ -92,8 +90,6 @@ class MapsHandler(BaseHandler):
         This method handles removing the extension from the map.
         If the extension have some data associated to the map, it must be deleted here.
         All subsequent requests to the map will be rejected with 403 status.
-        This handler will be called at the extension registration to verify,
-        that the extension is up and works.
         :param map_id: id of the map
         """
         logging.info(f'Extension deleted from map with id {map_id}')
@@ -110,10 +106,6 @@ class NotifyCommandHandler(BaseHandler):
         # Build response
         await self.finish({
             'notify': {
-                # Id of the user, that started this command.
-                'userId': self.user_id,
-                # User session, that allows to send notifications back to the user interface in the browser
-                'session': self.session_id,
                 # Notification Text
                 'content': 'Hello, RedForester!',
                 # notification display style one of DEFAULT, PRIMARY, SUCCESS, DANGER, WARNING, INFO

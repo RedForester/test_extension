@@ -1,7 +1,7 @@
 import os
 
 # base url of the RedForester API
-RF_BACKEND_BASE_URL = os.getenv('RF_BACKEND_BASE_URL', 'http://app.test,redforester.com/api')
+RF_BACKEND_BASE_URL = os.getenv('RF_BACKEND_BASE_URL', 'http://app.test.redforester.com/api')
 
 
 ########################################################
