@@ -19,7 +19,7 @@ EXT_DESCRIPTION = 'test extension description'
 EXT_EMAIL = 'you.public.email@domain'
 
 # address, at which this extension is listening
-EXT_BASE_URL = f'https://{os.getenv("HEROKU_APP_NAME", "")}.herokuapp.com:443'
+EXT_BASE_URL = os.getenv('EXT_BASE_URL', 'http://localhost:8080')
 
 # Cookie of the owner of this extension. Required only for register_extension.py script.
 USER_COOKIE = ''
