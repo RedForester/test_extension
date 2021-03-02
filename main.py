@@ -127,27 +127,25 @@ class NotifyFromKvCommandHandler(BaseHandler):
         This is an example of a command handler that creates a simple notification but using the API.
         """
         # creating a new aiohttp session with Basic Auth using user extension and user token as password
-        _session: ClientSession = ClientSession(
+        async with ClientSession(
             # Temporary user token, that allows the extension to access the RedForester API.
             auth=BasicAuth(login='extension', password=self.user_token),
             json_serialize=ujson.dumps,
-        )
-
-        async with _session.post(
-            RF_BACKEND_BASE_URL + '/notify/notification/map/' + self.map_id,
-            json={
-                'user_id': self.user_id,
-                'notification_type': 'info',
-                'notification_text': 'Hello again RedForester'
-            }
-        ) as response:
-            data = await response.text("utf-8")
-            if response.status == 200:
-                logging.info('Dialog has been created')
-            else:
-                logging.error(f'Dialog has NOT been created: {data}')
-
-            await _session.close()
+        ) as session:
+            async with session.post(
+                RF_BACKEND_BASE_URL + '/notify/notification/map/' + self.map_id,
+                json={
+                    'user_id': self.user_id,
+                    'session_id': self.session_id,
+                    'notification_type': 'info',
+                    'notification_text': 'Hello again RedForester'
+                }
+            ) as response:
+                data = await response.text("utf-8")
+                if response.status == 200:
+                    logging.info('Notification has been created')
+                else:
+                    logging.error(f'Notification has NOT been shown: {data}')
 
         await self.finish({})
 
@@ -158,31 +156,28 @@ class DialogFromKvCommandHandler(BaseHandler):
         This is an example of a command handler that creates a dialog that will be shown to the user.
         """
         # creating a new aiohttp session with Basic Auth using user extension and user token as password
-        _session: ClientSession = ClientSession(
+        async with ClientSession(
             # Temporary user token, that allows the extension to access the RedForester API.
             auth=BasicAuth(login='extension', password=self.user_token),
             json_serialize=ujson.dumps,
-        )
-        
-        # perform request
-        async with _session.post(
-            RF_BACKEND_BASE_URL + '/notify/dialog/map/' + self.map_id,
-            json={
-                'user_id': self.user_id,
-                'dialog_src': EXT_BASE_URL,
-                'dialog_size': {
-                    'width': '300',
-                    'height': '400'
+        ) as session:
+            # perform request
+            async with session.post(
+                RF_BACKEND_BASE_URL + '/notify/dialog/map/' + self.map_id,
+                json={
+                    'user_id': self.user_id,
+                    'dialog_src': EXT_BASE_URL,
+                    'dialog_size': {
+                        'width': '300',
+                        'height': '400'
+                    }
                 }
-            }
-        ) as response:
-            data = await response.text("utf-8")
-            if response.status == 200:
-                logging.info('Dialog has been created')
-            else:
-                logging.error(f'Dialog has NOT been created: {data}')
-
-            await _session.close()
+            ) as response:
+                data = await response.text("utf-8")
+                if response.status == 200:
+                    logging.info('Dialog has been created')
+                else:
+                    logging.error(f'Dialog has NOT been created: {data}')
 
         await self.finish({})
 
