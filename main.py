@@ -170,7 +170,8 @@ class DialogFromKvCommandHandler(BaseHandler):
                     'dialog_size': {
                         'width': '300',
                         'height': '400'
-                    }
+                    },
+                    'dialog_title': 'Dialog From Kv Command'
                 }
             ) as response:
                 data = await response.text("utf-8")
@@ -195,6 +196,7 @@ class IframeCommandHandler(BaseHandler):
                 # used to indicate iframe width and height in pixels
                 'width': 300,
                 'height': 400,
+                'title': 'Iframe Command'
             }
         })
 
