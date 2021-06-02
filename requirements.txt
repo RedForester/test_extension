@@ -8,5 +8,5 @@ multidict==4.7.4
 requests==2.22.0
 tornado==6.0.3
 ujson==1.35
-urllib3==1.25.8
+urllib3==1.26.5
 yarl==1.4.2
