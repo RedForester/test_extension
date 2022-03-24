@@ -1,0 +1,58 @@
+name: test-extension
+description: |
+    multiline
+    description
+shortDescription: extension description
+baseUrl: https://satek-test-extension-prod.extensions.redforester.com
+email: youpublicemail@domain.com
+requiredTypes:
+    - name: CustomType1
+      properties:
+        - name: Field1
+          category: TEXT
+          argument: TEXT_SIMPLE
+commands:
+    - name: Show dialog using KV
+      type:
+        action: dialog_from_kv
+      description: just open dialog but with KV
+      showRules:
+        - root: true
+    - name: Command-url
+      type:
+        url: https://satek-test-extension-prod.extensions.redforester.com
+      description: open url in new tab
+      showRules:
+        - selfType: CustomType1
+    - name: Open url
+      type:
+        action: url
+      description: open url in new tab
+      showRules:
+        - selfType: CustomType1
+    - name: Send notify
+      type:
+        action: notify
+      description: just notify
+      showRules:
+        - allNodes: true
+    - name: Open IFrame
+      type:
+        action: iframe
+      description: just open iframe
+      showRules:
+        - descendantOfType: CustomType1
+    - name: Throw error
+      type:
+        action: with_error
+      description: show notification about error
+      showRules:
+        - root: true
+    - name: Send notify using KV
+      type:
+        action: notify_from_kv
+      description: just notify but with KV
+      showRules:
+        - allNodes: true
+extensionUser:
+    username: test-extension
